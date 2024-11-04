@@ -1,0 +1,11 @@
+{
+    "mux": [
+        {
+            "name": "mux_cmd_vel",
+            "cooldownTime": 0.5,
+            "dType": "Twist",
+            "topics": ["teleop/cmd_vel", "move_base/cmd_vel"],
+            "outTopic": "cmd_vel"
+        }
+    ]
+}

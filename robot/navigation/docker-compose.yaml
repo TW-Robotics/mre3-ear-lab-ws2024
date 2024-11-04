@@ -1,0 +1,31 @@
+services:
+
+  move_base_flex:
+    image: robot/move_base_flex
+    build:
+      context: ./
+      dockerfile: Dockerfile.move_base_flex
+    network_mode: host
+    command: roslaunch /app/move_base_flex.launch --wait
+    volumes:
+      - ./src/move_base_flex:/app/
+
+  semi_autonomy_mux:
+    image: robot/semi_autonomy
+    build:
+      context: ./
+      dockerfile: Dockerfile.semi_autonomy
+    volumes:
+      - ./src/semi_autonomy:/app
+    command: python3 /app/muxInstantiator.py
+    network_mode: host
+
+  semi_autonomy_preempt_goal:
+    image: robot/semi_autonomy
+    build:
+      context: ./
+      dockerfile: Dockerfile.semi_autonomy
+    volumes:
+      - ./src/semi_autonomy:/app
+    command: python3 /app/preempt_goal.py
+    network_mode: host
