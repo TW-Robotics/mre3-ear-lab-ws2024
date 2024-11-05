@@ -1,0 +1,11 @@
+services:
+
+  tracker_launch:
+    image: robot/tracker_launch
+    build:
+      context: ./
+      dockerfile: Dockerfile.tracker_launch
+    network_mode: host
+    command: roslaunch fhtw_launch tau_bringup.launch
+    volumes:
+      - ./src/:/catkin_ws/src/

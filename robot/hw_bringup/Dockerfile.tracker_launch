@@ -1,0 +1,35 @@
+FROM ros:noetic-ros-base
+
+# Copy ROS packages for compilation in container
+COPY ./src /catkin_ws/src
+
+# Install ros dependencies
+RUN apt-get update && rosdep update && rosdep install --from-paths /catkin_ws/src -i -y --rosdistro noetic
+
+# Protobuf for tracker api
+RUN apt-get install -q -y --no-install-recommends protobuf-compiler libprotobuf-dev
+
+# Legacy dependency from old sieglinde
+RUN apt-get install -q -y --no-install-recommends ros-noetic-sick-tim
+
+# Sieglinde lights
+RUN apt-get install -q -y --no-install-recommends python3-requests
+
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash \
+    && cd catkin_ws && catkin_make"
+
+# Remove src folder used for compilation, since the real src folder will be mounted at runtime
+RUN rm -rf /catkin_ws/src
+
+## Add ros sourcing to entrypoint 
+# Remove last line from entrypoint, add local workspace sourcing and readd last line
+RUN sed -i '$ d' /ros_entrypoint.sh
+RUN echo "source /catkin_ws/devel/setup.bash" >> /ros_entrypoint.sh
+#
+RUN echo 'exec "$@"' >> /ros_entrypoint.sh
+# Add sourcing to bashrc for interactive debugging
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "source /catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT ["/ros_entrypoint.sh"]
