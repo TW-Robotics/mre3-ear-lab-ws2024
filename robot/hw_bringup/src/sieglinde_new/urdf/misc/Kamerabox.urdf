@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="Kamerabox">
+
+  <joint name="dummyjointkamerabox" type="fixed">
+     <origin xyz="0.235 0 0" rpy="-1.5708 0 0"/>
+     <parent link="chassis_link"/>
+     <child link="kamerabox"/>
+  </joint>
+
+
+  <link
+    name="kamerabox">
+    <inertial>
+      <origin
+        xyz="0.0012767 -2.747E-18 -0.049394"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="0.2515"
+        ixy="-1.4629E-17"
+        ixz="-0.0036599"
+        iyy="0.21384"
+        iyz="5.192E-18"
+        izz="0.26871" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/kamerabox.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/kamerabox.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="halterung">
+    <inertial>
+      <origin
+        xyz="-0.00051606 -0.0060421 0.02885"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="3.9796E-05"
+        ixy="3.0397E-07"
+        ixz="-6.7777E-07"
+        iyy="6.9462E-05"
+        iyz="5.693E-06"
+        izz="4.4043E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/halterung.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.49804 0.49804 0.49804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/halterung.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="halterunglink"
+    type="fixed">
+    <origin
+      xyz="0.065 -0.1 0"
+      rpy="1.5708 1.5708 0" />
+    <parent
+      link="kamerabox" />
+    <child
+      link="halterung" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="L515">
+    <inertial>
+      <origin
+        xyz="2.3425E-06 -0.19271 -0.086411"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <inertia
+        ixx="0.21876"
+        ixy="-8.0619E-06"
+        ixz="-3.3368E-06"
+        iyy="0.2693"
+        iyz="-0.0051679"
+        izz="0.25593" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/L515.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/misc/L515.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="L515link"
+    type="fixed">
+    <origin
+      xyz="0 0.0231 0.0445"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="halterung" />
+    <child
+      link="L515" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<robot name="box">
+
+  <joint name="dummyjointbox" type="fixed">
+     <origin xyz="-0.57 -0.03 0.1" rpy="0 0 0"/>
+     <parent link="chassis_link"/>
+     <child link="boxlink"/>
+  </joint>
+
+  <link name="boxlink">
+    <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 0.2"/>
+      </geometry>
+     <material name="Grey">
+       <color rgba="0.8 0.8 0.8 1.0"/>
+     </material>
+    </visual>
+    <collision>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
+     <geometry>
+       <box size="0.3 0.3 0.2"/>
+     </geometry>
+   </collision>
+  </link>
+  
+  
+</robot>
+

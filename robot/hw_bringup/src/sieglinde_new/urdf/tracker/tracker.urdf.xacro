@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+
+<!-- 
+  * Meta xacro for the tracker robot (t3, eg Karl) 
+  * This file contains the complete robots description with arm. 
+  * 
+  *  This model assembles a tracker with:
+  *      - tracker chassis 
+  *      - arm (old)
+  *      - has a lidar 
+  *      
+  *  Includetree: 
+  *  chassis.urdf.xacro 
+  *      ==> $(find hector_xacro_tools)/urdf/inertia_tensors.urdf.xacro
+  *      ==> $(find taurob_robots_description)/urdf/chassis.gazebo.xacro
+  *      ==> $(find taurob_robots_description)/urdf/taurob_camera.xacro
+  *      ==> $(find taurob_robots_description)/urdf/taurob_camera.gazebo
+  *      ==> $(find velodyne_description)/urdf/VLP-16.urdf.xacro
+  *      
+  *  arm_collision_geoms_simple.urdf.xacro
+  *  
+  *  arm_macros.urdf.xacro
+  *      ==> $(find hector_xacro_tools)/urdf/inertia_tensors.urdf.xacro
+  *      ==> $(find taurob_robots_description)/urdf/taurob_camera.xacro
+  *      ==> $(find taurob_robots_description)/urdf/taurob_camera.gazebo
+  *
+  * Copyright (c) 2017 taurob GmbH. All rights reserved. Confidential and proprietary.
+  * Perfektastrasse 57/7, 1230 Wien, Austria. office@taurob.com     
+-->
+
+<robot name="taurob_tracker" 
+    xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- [BEGIN] === Arguemnt section === -->
+    <xacro:arg name="gpu" default="false" />
+    <!-- doc="Set gpu to false if running on VMWare."-->
+    <!-- doc="Valid options are fixed, rotate and placement_rot." -->
+    <!-- doc="Valid arguments simulation and physical. Simulation mode starts gazebo plugins."-->
+    <!-- doc="Configure parameters foce based move" -->
+    <xacro:arg name="odomTopic" default="odom" />
+    <xacro:arg name="publishTF" default="1" />
+
+
+    <!-- [BEGIN] === Properties section === -->
+    <xacro:property name="gpu" value="$(arg gpu)" />
+
+
+  
+
+    <xacro:property name="M_PI" value="3.14159" />
+
+    <!-- chassis properties -->
+    <xacro:property name="flipper_offset_x" value="0.205" />
+    <xacro:property name="flipper_offset_y" value="0.15" />
+    <xacro:property name="flipper_offset_z" value="0.099" />
+
+    <xacro:property name="tracker_chassis_link_offset_x" value="0.0" />
+    <xacro:property name="tracker_chassis_link_offset_y" value="0.0" />
+    <xacro:property name="tracker_chassis_link_offset_z" value="0.0" />
+
+
+
+    <!-- [BEGIN] === Include section === -->
+    <xacro:include filename="$(find sieglinde_new)/urdf/tracker/chassis.urdf.xacro" />
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
+    <xacro:include filename="$(find sieglinde_new)/urdf/arm/taurob_arm.urdf" />
+    <xacro:include filename="$(find sieglinde_new)/urdf/gripper/sieglindeGripper.urdf" />
+    <xacro:include filename="$(find sieglinde_new)/urdf/misc/box.urdf" />
+    <xacro:include filename="$(find sieglinde_new)/urdf/misc/Kamerabox.urdf" />
+
+
+
+
+    <!-- [BEGIN] === Macro section === -->
+
+    <!-- Insert chassis. Default script for real robot or force based plugin use-->
+    <xacro:tracker_chassis />
+
+
+    <!-- FHTW -->
+
+    <!-- LIDAR -->
+    <link name="velodyne_base_link">
+      <inertial>
+        <mass value="0.83"/>
+        <origin xyz="0 0 0.03585"/>
+        <inertia ixx="${(0.83 * (3.0*0.0516*0.0516 + 0.0717*0.0717)) / 12.0}" ixy="0" ixz="0"
+            iyy="${(0.83 * (3.0*0.0516*0.0516 + 0.0717*0.0717)) / 12.0}" iyz="0"
+            izz="${0.5 * 0.83 * (0.0516*0.0516)}"/>
+      </inertial>
+      <visual>
+        <geometry>
+            <mesh filename="package://velodyne_description/meshes/VLP16_base_1.dae" />
+        </geometry>
+      </visual>
+      <visual>
+        <geometry>
+            <mesh filename="package://velodyne_description/meshes/VLP16_base_2.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0.03585"/>
+        <geometry>
+            <cylinder radius="0.0516" length="0.0717"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="velodyne">
+      <inertial>
+        <mass value="0.01"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 -0.0377" />
+        <geometry>
+          <mesh filename="package://velodyne_description/meshes/VLP16_scan.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="velodyne_base" type="fixed">
+        <parent link="chassis_link"/>
+        <child link="velodyne_base_link"/>
+        <origin xyz="-0.655 0 0.2" rpy="0 0 0.0"/>
+    </joint>
+
+    <joint name="velodyne" type="fixed" >
+        <origin xyz="0 0 0.0377" rpy="0 0 0" />
+        <parent link="velodyne_base_link" />
+        <child link="velodyne"/>
+    </joint>
+    
+        
+    <!-- IMU -->
+    <link name="imu">
+      <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.0525" length="0.02"/>
+      </geometry>
+     <material name="Blue">
+       <color rgba="0.1 0.1 0.9 1.0"/>
+     </material>
+    </visual>
+    <collision>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
+     <geometry>
+       <cylinder radius="0.0525" length="0.02"/>
+     </geometry>
+   </collision>
+  </link>
+    
+    
+    <joint name="imu" type="fixed">
+        <origin xyz="0 0 0.04" rpy="0 0 0" />
+        <parent link="velodyne" />
+        <child link="imu"/>
+    </joint>
+
+    <!-- [BEGIN] ===  Added ROS control plugins for gazebo simulation===-->
+    <xacro:arg name="operation_mode" default="simulation"/>
+    <xacro:property name="operation_mode" value="$(arg operation_mode)"/>
+
+    <xacro:if value="${operation_mode  == 'simulation'}">
+        <gazebo>
+            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+                <robotNamespace></robotNamespace>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+  <!-- [END] ===  Added ROS control plugins for gazebo simulation===-->
+</robot>

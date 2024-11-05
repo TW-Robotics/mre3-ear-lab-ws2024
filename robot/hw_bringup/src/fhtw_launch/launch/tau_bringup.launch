@@ -1,0 +1,25 @@
+<launch>
+    <arg name="joy_config"  default="panel"/>
+    <!-- Start Taurob Tracker TCP/IP communication with backend -->
+    <include file="$(find taurob_tracker_ros_driver)/launch/tracker.launch">
+    </include>
+    
+    <!-- Joy to teleop converter -->
+    <!-- <remap from="cmd_vel" to="teleop/cmd_vel" />
+    <include file="$(find taurob_teleop_twist_joy)/launch/teleop.launch">
+        <arg name="joy_config" value="$(arg joy_config)"/>
+    </include> -->
+
+    <node pkg="fhtw_launch" type="licht_intern.py" name="internal_lights_server"/>
+    <include file="$(find taurob_moveit_interface)/launch/moveit.launch"/>
+
+    <!-- Start Gamma and Raman Action Server -->
+    <include file="$(find fhtw_launch)/launch/sensors.launch" />
+    <!-- Start Message Reporter (either in offline or online mode) -->
+    <!--include file="$(find fhtw_launch)/launch/full_cbrn_message_reporter.launch" /-->
+    <!-- <include file="$(find fhtw_launch)/launch/offline_cbrn_message_reporter.launch" /> -->
+
+    <!-- Radiation Mapping -->
+    <!--include file="$(find radiationMapperPKG)/launch/run_bagfile.launch" /-->
+
+</launch>

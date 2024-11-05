@@ -1,0 +1,6 @@
+<launch>
+    <!--Start Gamma Detection driver publishing every second on various topics-->
+    <node pkg="gamma_detektion" type="identifinder.py" name="identifinder" output="screen" />
+    <!--Start Raman Action Server to broker measurements for clients-->
+    <node pkg="action_server_raman" type="raman_action_server.py" name="first_defender" output="screen" />    
+</launch>

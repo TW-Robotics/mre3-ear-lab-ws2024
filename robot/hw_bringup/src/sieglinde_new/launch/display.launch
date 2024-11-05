@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+<arg name="robot_model" default="tracker" />
+
+
+<param name="robot_description" command="xacro --inorder '$(find sieglinde_new)/urdf/tracker/tracker.urdf.xacro'"/>
+
+
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sieglinde_new)/config/sieglinde.rviz"/>
+
+</launch>

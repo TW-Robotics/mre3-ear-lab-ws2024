@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: sieglinde_new
+    relative_path: urdf/tracker/tracker.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/taurob_tracker.srdf
+  CONFIG:
+    author_name: Taurob Gmbh
+    author_email: support@taurob.com
+    generated_timestamp: 1684844589

@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="sieglindeGripper">
+
+<!-- changed 22.05.23 from Taurob: rpy="0 -1.5708 -1.5708" -->
+<joint name="arm_joint_4" type="revolute">
+<origin
+      xyz="0.128 -0.0115 0.438"
+      rpy="0 -1.5708 -1.5708" />
+    <parent
+      link="arm_link_3" />
+    <child
+      link="arm_link_4" />
+    <axis
+      xyz="0 1 0" />
+    <!-- <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="4"
+      velocity="3.14" /> -->
+    <!--limit 
+      lower="${0 * M_PI / 180}" 
+      upper="4.74399995803833" 
+      effort="1000" 
+      velocity="${57.2958 * M_PI / 180}"/-->
+    <limit 
+      lower="0" 
+      upper="4.712" 
+      effort="1000" 
+      velocity="${57.2958 * M_PI / 180}"/>
+    <dynamics
+      damping="1.0"
+      friction="0.01" />
+  </joint>
+
+  <link
+    name="arm_link_4">
+    <inertial>
+      <origin
+        xyz="0.065104 -0.00028882 -0.0090979"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <!-- <inertia
+        ixx="0.00068231"
+        ixy="-5.9473E-06"
+        ixz="1.8695E-05"
+        iyy="0.0016609"
+        iyz="1.5591E-06"
+        izz="0.0017673" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="arm_link_5">
+    <inertial>
+      <origin
+        xyz="0.0044064 -0.0001 0.096772"
+        rpy="0 0 0" />
+      <mass
+        value="1" />
+      <!-- <inertia
+        ixx="9.8592E-05"
+        ixy="-2.4552E-18"
+        ixz="-7.322E-07"
+        iyy="0.00010734"
+        iyz="7.5695E-19"
+        izz="0.00017125" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Link5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Link5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="arm_joint_5"
+    type="continuous">
+    <origin
+      xyz="0.087 0 -0.0015"
+      rpy="0 1.5708 0" />
+    <parent
+      link="arm_link_4" />
+    <child
+      link="arm_link_5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="10"
+      velocity="3.14" />
+    <dynamics
+      damping="1.0"
+      friction="5.0" />
+  </joint>
+  <link
+    name="Gripper">
+    <inertial>
+      <origin
+        xyz="-0.008388 -0.014564 0.024958"
+        rpy="0 0 0" />
+      <mass
+        value="0.014249" />
+      <!-- <inertia
+        ixx="1.511E-06"
+        ixy="-3.802E-07"
+        ixz="6.8871E-09"
+        iyy="1.07E-06"
+        iyz="1.5611E-08"
+        izz="1.5649E-06" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Grip"
+    type="revolute">
+    <origin
+      xyz="0.02025 0.034974 0.137"
+      rpy="0 0 3.1416" />
+    <parent
+      link="arm_link_5" />
+    <child
+      link="Gripper" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="4"
+      velocity="3.14" />
+    <dynamics
+      damping="1.0"
+      friction="5.0" />
+  </joint>
+  <link
+    name="Gripper2">
+    <inertial>
+      <origin
+        xyz="-0.0084188 0.014546 0.024958"
+        rpy="0 0 0" />
+      <mass
+        value="0.014249" />
+      <!-- <inertia
+        ixx="1.5095E-06"
+        ixy="3.8104E-07"
+        ixz="1.0076E-08"
+        iyy="1.0715E-06"
+        iyz="-1.377E-08"
+        izz="1.5649E-06" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="g2"
+    type="revolute">
+    <origin
+      xyz="0.02025 -0.035174 0.137"
+      rpy="0 0 3.1416" />
+    <parent
+      link="arm_link_5" />
+    <child
+      link="Gripper2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="4"
+      velocity="3.14" />
+    <dynamics
+      damping="0.5"
+      friction="0.0" />
+    <mimic
+      joint="Grip"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="Gripper3">
+    <inertial>
+      <origin
+        xyz="0.016807 1.7794E-05 0.024958"
+        rpy="0 0 0" />
+      <mass
+        value="0.014249" />
+      <!-- <inertia
+        ixx="8.5099E-07"
+        ixy="-8.4555E-10"
+        ixz="-1.6963E-08"
+        iyy="1.73E-06"
+        iyz="-1.8412E-09"
+        izz="1.5649E-06" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.8 0.8 0.9 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/gripper/Gripper3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="g3"
+    type="revolute">
+    <origin
+      xyz="-0.0405 -0.00010001 0.137"
+      rpy="0 0 3.1416" />
+    <parent
+      link="arm_link_5" />
+    <child
+      link="Gripper3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="4"
+      velocity="3.14" />
+    <dynamics
+      damping="0.5"
+      friction="0.0" />
+    <mimic
+      joint="Grip"
+      multiplier="1"
+      offset="0" />
+  </joint>
+
+  <!-- TODO: Please use consistent joint names, keeping the current ones for now-->
+  <!-- [BEGIN] ===  Gripper transmission section. Needed for ros_control. === -->
+    <transmission name="arm_joint_5_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_joint_5">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_joint_5_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="grip_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Grip">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="grip_joint_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="g2_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="g2">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="g2_joint_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="g3_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="g3">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="g3_joint_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+<!-- [END] ===  Arm transmission section. Needed for ros_control. === -->
+</robot>

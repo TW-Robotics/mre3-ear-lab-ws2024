@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="taurob_tracker">
+
+
+
+<!---<joint name="dummyjoint" type="fixed">
+    <origin
+        xyz="0 0 0"
+        rpy="-1.5708 0 3.141" />
+    <parent
+        link="arm_flange_link" />
+    <child
+        link="base_arm" />
+</joint>-->
+
+  <link
+    name="base_arm">
+    <inertial>
+      <origin
+        xyz="7.983E-19 -5.2611E-34 0.019067"
+        rpy="0 0 0" />
+      <mass
+        value="2" />
+      <!-- <inertia
+        ixx="9.6981E-05"
+        ixy="-1.903E-36"
+        ixz="1.5021E-21"
+        iyy="9.6981E-05"
+        iyz="-1.0565E-36"
+        izz="0.00011306" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="arm_link_1">
+    <inertial>
+      <origin
+        xyz="0.0038798 7.2516E-08 0.056206"
+        rpy="0 0 0" />
+      <mass
+        value="10" />
+      <!-- <inertia
+        ixx="0.00091868"
+        ixy="-1.844E-11"
+        ixz="-8.2868E-05"
+        iyy="0.0007717"
+        iyz="7.2531E-11"
+        izz="0.00069796" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <!-- changed 22.05.23 from Taurob: rpy="1.5708 1.5708 0" -->
+  <joint
+    name="arm_joint_1"
+    type="revolute">
+    <origin
+      xyz="0 -0.039 0"
+      rpy="1.5708 -1.5708 0" />
+    <parent
+      link="base_arm" />
+    <child
+      link="arm_link_1" />
+    <axis
+      xyz="0 0 1" />
+    <!-- <limit
+      lower="-3.141"
+      upper="3.141"
+      effort="10"
+      velocity="3.141" /> -->
+    <!--limit 
+      lower="${0 * M_PI / 180}" 
+      upper="${330 * M_PI / 180}" 
+      effort="1000" 
+      velocity="${80.2141 * M_PI / 180}"/-->
+    <limit 
+      lower="-3.141" 
+      upper="3.141" 
+      effort="1000" 
+      velocity="${80.2141 * M_PI / 180}"/>
+    <dynamics
+      damping="0.5"
+      friction="0.01" />
+  </joint>
+  <link
+    name="arm_link_2">
+    <inertial>
+      <origin
+        xyz="0.027796 -0.27705 -0.076051"
+        rpy="0 0 0" />
+      <mass
+        value="7" />
+      <!-- <inertia
+        ixx="0.27927"
+        ixy="-1.0333E-05"
+        ixz="-9.7702E-06"
+        iyy="0.012963"
+        iyz="-8.4319E-05"
+        izz="0.28228" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <!-- changed 22.05.23 from Taurob: rpy="-1.5708 0 1.5708" -->
+  <joint
+    name="arm_joint_2"
+    type="revolute">
+    <origin
+      xyz="0.03 0 0.0725"
+      rpy="-1.5708 ${1.5708+3.1415+1.5708} ${1.5708}" />
+    <parent
+      link="arm_link_1" />
+    <child
+      link="arm_link_2" />
+    <axis
+      xyz="0 0 -1" />
+    <!-- <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="10"
+      velocity="3.141" /> -->
+    <!--limit 
+      lower="${0* M_PI / 180}" 
+      upper="${180 * M_PI / 180}" 
+      effort="1000" 
+      velocity="${31.5126 * M_PI / 180}"/-->
+    <limit 
+      lower="-1.5708" 
+      upper="1.5708" 
+      effort="1000" 
+      velocity="${31.5126 * M_PI / 180}"/>
+    <dynamics
+      damping="0.5"
+      friction="0.01" />
+  </joint>
+  <link
+    name="arm_link_3">
+    <inertial>
+      <origin
+        xyz="0.025884 -0.0001487 0.21827"
+        rpy="0 0 0" />
+      <mass
+        value="3.5" />
+      <!-- <inertia
+        ixx="0.078643"
+        ixy="5.6989E-06"
+        ixz="6.0713E-05"
+        iyy="0.07821"
+        iyz="0.00011129"
+        izz="0.0038311" /> -->
+  <inertia ixx="0.002" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.002"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sieglinde_new/meshes/arm/Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <!-- changed 22.05.23 from Taurob: rpy="1.5708 -1.5708 0" -->
+  <joint
+    name="arm_joint_3"
+    type="revolute">
+    <origin
+      xyz="0 -0.5545 0"
+      rpy="1.5708 -1.5708 1.5707" />
+    <parent
+      link="arm_link_2" />
+    <child
+      link="arm_link_3" />
+    <axis
+      xyz="1 0 0" />
+    <!-- <limit
+      lower="-3.141"
+      upper="3.141"
+      effort="10"
+      ${3.1415+0.7853/2}
+      velocity="3.141" /> -->
+    <!--limit 
+      lower="${0 * M_PI / 180}" 
+      upper="${323* M_PI / 180}" 
+      effort="1000" 
+      5.651
+      velocity="${57.2958 * M_PI / 180}"/-->
+    <limit 
+      lower="-2.8274" 
+      upper="2.8274" 
+      effort="1000" 
+      velocity="${57.2958 * M_PI / 180}"/>
+    <dynamics
+      damping="0.5"
+      friction="0.01" />
+  </joint>
+
+    <!-- [BEGIN] ===  Arm transmission section. Needed for ros_control. ===-->
+    <transmission name="arm_joint_1_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_joint_1">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_joint_1_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="arm_joint_2_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_joint_2">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_joint_2_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="arm_joint_3_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_joint_3">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_joint_3_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="arm_joint_4_joint_transmssion">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="arm_joint_4">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="arm_joint_4_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <!-- [END] ===  Arm transmission section. Needed for ros_control. ===-->
+</robot>

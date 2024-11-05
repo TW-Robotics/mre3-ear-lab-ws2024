@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch the cbrn_message_reporter Node -->
+  <node name="cbrn_message_reporter" pkg="cbrn_message_reporter" type="cbrn_message_reporter" output="screen">
+    <!-- Mockup parameters -->
+    <param name="~configuration_file" value="$(find cbrn_message_reporter)/cfg/fhtw_mailserver_config.json" />
+    <param name="~recipient" value="sieglinde.maus.2@gmx.at" />
+    <param name="~subject" value="Evaluation CBRN Report" />
+    <param name="~exer_exercise_nickname" value="EvaluationExercise" />
+    <param name="~exer_exercise_identifier" value="MockupID" />
+    <param name="~oper_operation_codeword" value="testCodeword" />
+    <param name="~oper_plan_originator_and_number" value="test1000" />
+    <param name="~oper_option_nickname" value="Sigi" />
+    <param name="~oper_secondary_option_nickname" value="Maus" />
+    <param name="~r300_data_topic" value="/GammaDataR300" />
+  </node>
+
+  <!--Trigger R300 Gamma Report-->
+  <node name="r300_service_caller"
+      pkg="rosservice"
+      type="rosservice"
+      args="call --wait /cbrn_message_reporter/trigger_r300_measurement {}"
+      launch-prefix="bash -c 'while true; do $0 $@; sleep 120; done'"
+  />
+
+  <!--Set Location-->
+  <node name="mockup_location_setter"
+    pkg="rostopic"
+    type="rostopic"
+    args='pub -l -r 0.1 /cbrn_message_reporter/location geographic_msgs/GeoPoint --file=$(find cbrn_message_reporter)/cfg/mockup_location.yaml'
+    />
+</launch>

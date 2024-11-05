@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="taurob_tracker">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="arm">
+        <joint name="arm_joint_1"/>
+        <joint name="arm_joint_2"/>
+        <joint name="arm_joint_3"/>
+        <joint name="arm_joint_4"/>
+        <chain base_link="base_arm" tip_link="arm_link_4"/>
+    </group>
+    <group name="gripper">
+        <joint name="arm_joint_5"/>
+        <joint name="Grip"/>
+        <joint name="g2"/>
+        <joint name="g3"/>
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="gripper_open" group="gripper">
+        <joint name="Grip" value="0"/>
+        <joint name="arm_joint_5" value="0"/>
+    </group_state>
+    <group_state name="home_pose_back" group="arm">
+        <joint name="arm_joint_1" value="3.141"/>
+        <joint name="arm_joint_2" value="0"/>
+        <joint name="arm_joint_3" value="4.304"/>
+        <joint name="arm_joint_4" value="2.451"/>
+    </group_state>
+        <group_state name="home_pose" group="arm">
+        <joint name="arm_joint_1" value="0"/>
+        <joint name="arm_joint_2" value="0"/>
+        <joint name="arm_joint_3" value="4.304"/>
+        <joint name="arm_joint_4" value="2.451"/>
+    </group_state>
+    <group_state name="inspect_pos" group="arm">
+        <joint name="arm_joint_1" value="3.051"/>
+        <joint name="arm_joint_2" value="0.104"/>
+        <joint name="arm_joint_3" value="1.42"/>
+        <joint name="arm_joint_4" value="1.172"/>
+    </group_state>
+        <group_state name="offset_swipe1_pos" group="arm">
+        <joint name="arm_joint_1" value="3.017"/>
+        <joint name="arm_joint_2" value="0.518"/>
+        <joint name="arm_joint_3" value="0.874"/>
+        <joint name="arm_joint_4" value="2.577"/>
+    </group_state>
+    <group_state name="swipe1_pos" group="arm">
+        <joint name="arm_joint_1" value="3.017"/>
+        <joint name="arm_joint_2" value="0.908"/>
+        <joint name="arm_joint_3" value="1.016"/>
+        <joint name="arm_joint_4" value="2.737"/>
+    </group_state>
+    <group_state name="swipe2_pos" group="arm">
+        <joint name="arm_joint_1" value="3.41"/>
+        <joint name="arm_joint_2" value="0.908"/>
+        <joint name="arm_joint_3" value="1.016"/>
+        <joint name="arm_joint_4" value="2.737"/>
+    </group_state>
+    <group_state name="aufnehmen_1" group="arm">
+        <joint name="arm_joint_1" value="5.645"/>
+        <joint name="arm_joint_2" value="0.047"/>
+        <joint name="arm_joint_3" value="4.711"/>
+        <joint name="arm_joint_4" value="3.535"/>
+    </group_state>
+    <group_state name="offset_aufnehmen_1" group="arm">
+        <joint name="arm_joint_1" value="5.647"/>
+        <joint name="arm_joint_2" value="0.1"/>
+        <joint name="arm_joint_3" value="4.504"/>
+        <joint name="arm_joint_4" value="3.708"/>
+    </group_state>
+    <group_state name="zwischenpose_hinten" group="arm">
+        <joint name="arm_joint_1" value="3.195"/>
+        <joint name="arm_joint_2" value="0.166"/>
+        <joint name="arm_joint_3" value="3.411"/>
+        <joint name="arm_joint_4" value="4.172"/>
+    </group_state>
+    <group_state name="offset_raman" group="arm">
+        <joint name="arm_joint_1" value="0.622"/>
+        <joint name="arm_joint_2" value="0.147"/>
+        <joint name="arm_joint_3" value="1.394"/>
+        <joint name="arm_joint_4" value="1.13"/>
+    </group_state>
+    <group_state name="raman_drop" group="arm">
+        <joint name="arm_joint_1" value="0.547"/>
+        <joint name="arm_joint_2" value="0.256"/>
+        <joint name="arm_joint_3" value="1.222"/>
+        <joint name="arm_joint_4" value="1.292"/>
+    </group_state>
+    <group_state name="offset_raman_drop" group="arm">
+        <joint name="arm_joint_1" value="0.554"/>
+        <joint name="arm_joint_2" value="0.215"/>
+        <joint name="arm_joint_3" value="1.47"/>
+        <joint name="arm_joint_4" value="1.156"/>
+    </group_state>
+     <group_state name="drive_pos" group="arm">
+        <joint name="arm_joint_1" value="0.022"/>
+        <joint name="arm_joint_2" value="0.943"/>
+        <joint name="arm_joint_3" value="5.237"/>
+        <joint name="arm_joint_4" value="2.451"/>
+    </group_state>   
+
+
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="threefingergripper" parent_link="arm_link_4" group="gripper" parent_group="arm"/>
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="virtual_joint_0" type="fixed" parent_frame="world" child_link="base_link"/>
+    <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
+    <passive_joint name="flipper_joint"/>
+    <passive_joint name="flipper_joint_mimic"/>
+    <passive_joint name="g2"/>
+    <passive_joint name="g3"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="Gripper" link2="arm_link_2" reason="Never"/>
+    <disable_collisions link1="Gripper" link2="arm_link_3" reason="Never"/>
+    <disable_collisions link1="Gripper" link2="arm_link_4" reason="Never"/>
+    <disable_collisions link1="Gripper" link2="arm_link_5" reason="Adjacent"/>
+    <disable_collisions link1="Gripper" link2="imu" reason="Never"/>
+    <disable_collisions link1="Gripper" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="Gripper2" link2="arm_link_2" reason="Never"/>
+    <disable_collisions link1="Gripper2" link2="arm_link_3" reason="Never"/>
+    <disable_collisions link1="Gripper2" link2="arm_link_4" reason="Never"/>
+    <disable_collisions link1="Gripper2" link2="arm_link_5" reason="Adjacent"/>
+    <disable_collisions link1="Gripper3" link2="arm_link_2" reason="Never"/>
+    <disable_collisions link1="Gripper3" link2="arm_link_3" reason="Never"/>
+    <disable_collisions link1="Gripper3" link2="arm_link_4" reason="Never"/>
+    <disable_collisions link1="Gripper3" link2="arm_link_5" reason="Adjacent"/>
+    <disable_collisions link1="Gripper3" link2="imu" reason="Never"/>
+    <disable_collisions link1="L515" link2="arm_link_1" reason="Never"/>
+    <disable_collisions link1="L515" link2="arm_link_2" reason="Never"/>
+    <disable_collisions link1="L515" link2="base_arm" reason="Never"/>
+    <disable_collisions link1="L515" link2="boxlink" reason="Never"/>
+    <disable_collisions link1="L515" link2="chassis_link" reason="Default"/>
+    <disable_collisions link1="L515" link2="flipper_link" reason="Never"/>
+    <disable_collisions link1="L515" link2="flipper_link_mimic" reason="Never"/>
+    <disable_collisions link1="L515" link2="halterung" reason="Adjacent"/>
+    <disable_collisions link1="L515" link2="imu" reason="Never"/>
+    <disable_collisions link1="L515" link2="kamerabox" reason="Default"/>
+    <disable_collisions link1="L515" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="arm_link_2" reason="Adjacent"/>
+    <disable_collisions link1="chassis_link" link2="arm_link_2"/>	
+    <disable_collisions link1="arm_link_1" link2="arm_link_3" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="base_arm" reason="Adjacent"/>
+    <disable_collisions link1="arm_link_1" link2="boxlink" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="chassis_link" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="flipper_link" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="flipper_link_mimic" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="halterung" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="imu" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="arm_link_1" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="arm_link_3" reason="Adjacent"/>
+    <disable_collisions link1="arm_link_2" link2="arm_link_4" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="arm_link_5" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="base_arm" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="boxlink" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="halterung" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="imu" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="arm_link_2" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_3" link2="arm_link_4" reason="Adjacent"/>
+    <disable_collisions link1="arm_link_3" link2="arm_link_5" reason="Never"/>
+    <disable_collisions link1="arm_link_3" link2="base_arm" reason="Never"/>
+    <disable_collisions link1="arm_link_4" link2="arm_link_5" reason="Adjacent"/>
+    <disable_collisions link1="arm_link_4" link2="imu" reason="Never"/>
+    <disable_collisions link1="arm_link_4" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_5" link2="imu" reason="Never"/>
+    <disable_collisions link1="arm_link_5" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="boxlink" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="chassis_link" reason="Adjacent"/>
+    <disable_collisions link1="base_arm" link2="flipper_link" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="flipper_link_mimic" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="halterung" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="imu" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="base_arm" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="chassis_link" reason="Adjacent"/>
+    <disable_collisions link1="boxlink" link2="flipper_link" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="flipper_link_mimic" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="halterung" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="imu" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="boxlink" link2="velodyne_base_link" reason="Default"/>
+    <disable_collisions link1="chassis_link" link2="flipper_link" reason="Adjacent"/>
+    <disable_collisions link1="chassis_link" link2="flipper_link_mimic" reason="Adjacent"/>
+    <disable_collisions link1="chassis_link" link2="halterung" reason="Default"/>
+    <disable_collisions link1="chassis_link" link2="imu" reason="Never"/>
+    <disable_collisions link1="chassis_link" link2="kamerabox" reason="Adjacent"/>
+    <disable_collisions link1="chassis_link" link2="velodyne_base_link" reason="Adjacent"/>
+    <disable_collisions link1="flipper_link" link2="flipper_link_mimic" reason="Default"/>
+    <disable_collisions link1="flipper_link" link2="halterung" reason="Never"/>
+    <disable_collisions link1="flipper_link" link2="imu" reason="Never"/>
+    <disable_collisions link1="flipper_link" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="flipper_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="flipper_link_mimic" link2="halterung" reason="Never"/>
+    <disable_collisions link1="flipper_link_mimic" link2="imu" reason="Never"/>
+    <disable_collisions link1="flipper_link_mimic" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="flipper_link_mimic" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="halterung" link2="imu" reason="Never"/>
+    <disable_collisions link1="halterung" link2="kamerabox" reason="Adjacent"/>
+    <disable_collisions link1="halterung" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="imu" link2="kamerabox" reason="Never"/>
+    <disable_collisions link1="imu" link2="velodyne_base_link" reason="Adjacent"/>
+    <disable_collisions link1="kamerabox" link2="velodyne_base_link" reason="Never"/>
+</robot>
