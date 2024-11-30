@@ -1,0 +1,39 @@
+FROM ros:noetic-ros-base
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    vim \
+    htop \
+    git \
+    ros-noetic-octomap-server
+
+# Create catkin workspace/src folder
+RUN mkdir -p /catkin_ws/src
+
+RUN cd catkin_ws/src &&\
+    /ros_entrypoint.sh git clone https://github.com/UnknownFreeOccupied/ufomap.git &&\
+    /ros_entrypoint.sh git clone https://github.com/jkk-research/pointcloud_to_grid.git &&\
+    /ros_entrypoint.sh git clone https://github.com/LTU-RAI/Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git &&\
+    cd Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map/ \
+    git checkout ros \
+    cd .. &&\
+    /ros_entrypoint.sh catkin_make
+
+# Install ros dependencies
+RUN apt-get update && rosdep update && rosdep install --from-paths /catkin_ws/src -i -y --rosdistro noetic
+
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash
+
+## Add ros sourcing to entrypoint 
+# Remove last line from entrypoint, add local workspace sourcing and readd last line
+RUN sed -i '$ d' /ros_entrypoint.sh
+RUN echo "source /catkin_ws/devel/setup.bash" >> /ros_entrypoint.sh
+#
+RUN echo 'exec "$@"' >> /ros_entrypoint.sh
+# Add sourcing to bashrc for interactive debugging
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "source /catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT ["/ros_entrypoint.sh"]
