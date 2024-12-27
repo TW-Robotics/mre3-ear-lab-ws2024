@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  gruppe_1:  # Name des Services, der im Docker-Container laufen wird
+    image: robot/gruppe_1  # Name des Docker-Images
+    build:
+      context: ./  # Pfad zum Verzeichnis, in dem die Docker-Datei liegt
+      dockerfile: Dockerfile.gruppe_1
+    network_mode: host  # Host-Netzwerk für ROS-Kommunikation
+    command: roscore
+    environment:
+      - DISPLAY=${DISPLAY}       # X11-Display
+      - QT_X11_NO_MITSHM=1       # Für Qt-basierte Anwendungen
+    volumes:
+      - ../../gruppe_1:/app               # Mount des Workspace-Verzeichnisses
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11-Socket für GUI
+      
+    devices:
+      - /dev/dri:/dev/dri  # Zugriff auf GPU
+    stdin_open: true
+    tty: true

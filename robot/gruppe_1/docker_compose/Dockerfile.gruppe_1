@@ -1,0 +1,41 @@
+# Basis-Image mit vollständiger ROS Noetic Desktop-Umgebung für Visualisierung
+FROM osrf/ros:noetic-desktop-full
+
+# Benutzererstellung
+ARG USERNAME=rosuser
+ARG USER_UID=1000
+ARG USER_GID=1000
+
+RUN apt-get update && apt-get install -y sudo git python3-pip x11-xserver-utils xauth \
+    && groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# ROS-Pakete installieren
+RUN apt-get install -y \
+        ros-noetic-move-base \
+        ros-noetic-pointcloud-to-laserscan \
+        ros-noetic-teb-local-planner \
+        ros-noetic-gmapping \
+        ros-noetic-dwa-local-planner \
+        ros-noetic-plotjuggler-ros \
+        ros-noetic-robot-state-publisher \
+        ros-noetic-map-server \
+        ros-noetic-rviz \
+        ros-noetic-amcl \
+        ros-noetic-xacro \
+        gazebo11 ros-noetic-gazebo-ros ros-noetic-gazebo-plugins ros-noetic-gazebo-ros-pkgs
+
+# Python Libraries
+RUN pip3 install numpy scipy casadi matplotlib pandas
+
+# Display-Umgebung konfigurieren
+RUN echo "export DISPLAY=:0" >> /home/$USERNAME/.bashrc
+RUN echo "source /opt/ros/noetic/setup.bash" >> /home/$USERNAME/.bashrc
+
+# Benutzer wechseln
+USER $USERNAME
+WORKDIR /home/$USERNAME
+
+CMD ["bash"]
