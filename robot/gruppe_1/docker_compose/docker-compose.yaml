@@ -7,9 +7,10 @@ services:
       context: ./  # Pfad zum Verzeichnis, in dem die Docker-Datei liegt
       dockerfile: Dockerfile.gruppe_1
     network_mode: host  # Host-Netzwerk für ROS-Kommunikation
+    privileged: true
     command: roscore
     environment:
-      - DISPLAY=${DISPLAY}       # X11-Display
+      - DISPLAY=${DISPLAY}      # X11-Display
       - QT_X11_NO_MITSHM=1       # Für Qt-basierte Anwendungen
     volumes:
       - ../../gruppe_1:/app               # Mount des Workspace-Verzeichnisses

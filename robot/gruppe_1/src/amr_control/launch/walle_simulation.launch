@@ -14,13 +14,12 @@
 
     <!-- Start the map_server node to provide the map for localization -->
     <node pkg="map_server" name="map_server" type="map_server" args="$(find amr_control)/maps/experimental_room4_map.yaml"/>     
-    
 
     <!-- Create gazebo world -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" >
         <arg name="world_name" value="$(arg world_name)"/>  
         <arg name="headless" value="false" />
-        <arg name="gui" value="true" />
+        <arg name="gui" value="false" />
         <arg name="use_sim_time" value="true" />
         <arg name="paused" value="false" />
         <arg name="debug" value="false" />

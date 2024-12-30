@@ -1,43 +1,38 @@
+<?xml version="1.0" ?>
 <launch>
-    <arg name="use_sim_time" default="true" />
-    <arg name="gui" default="false" />
-    <arg name="world_name" default="$(find ridgeback_gazebo)/worlds/ridgeback_race.world" />
+    <arg name="world_name" default="$(find amr_control)/worlds/experiment_rooms/worlds/room4/world.model" />
+    <arg name="model" default="burger" />
 
-    <!-- Robot Spawn Pose -->
-    <arg name="x" default="0"/>
-    <arg name="y" default="0"/>
-    <arg name="z" default="0.1"/>
-    <arg name="yaw" default="0"/>
-    <arg name="joystick" default="true" />
+    <!-- Arguments for initial pose of the robot -->
+    <arg name="init_pose_x" default="0" />
+    <arg name="init_pose_y" default="0" />
+    <arg name="init_pose_yaw" default="0" />
 
-    <!-- Configuration of Ridgeback which you would like to simulate.
-       See ridgeback_description for details. -->
-    <arg name="config" default="$(optenv RIDGEBACK_CONFIG base)" />
+    <!-- Start the map_server node to provide the map for localization -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(find amr_control)/maps/experimental_room4_map.yaml"/>     
 
     <!-- Create gazebo world -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(arg world_name)" />
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="world_name" value="$(arg world_name)"/>  
         <arg name="headless" value="false" />
-        <arg name="gui" value="$(arg gui)" />
-        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <arg name="gui" value="true" />
+        <arg name="use_sim_time" value="true" />
         <arg name="paused" value="false" />
         <arg name="debug" value="false" />
     </include>
 
-    <include file="$(find ridgeback_gazebo)/launch/spawn_ridgeback.launch">
-        <arg name="config" value="$(arg config)" />
-        <arg name="x" value="$(arg x)" />
-        <arg name="y" value="$(arg y)" />
-        <arg name="z" value="$(arg z)" />
-        <arg name="yaw" value="$(arg yaw)" />
-    </include>
+    <!-- Define robot description parameter using xacro to process the URDF file -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro"/>
 
-    <node pkg="map_server" name="map_server" type="map_server" args="$(find amr_control)/maps/ridgeback_world.yaml"/>     
+    <!-- Spawn TurtleBot3 URDF model in Gazebo -->
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_turtlebot" args="-urdf -model turtlebot3_burger -x $(arg init_pose_x) -y $(arg init_pose_y) -z 0.1 -Y $(arg init_pose_yaw) -param robot_description" />
 
-    <!-- Launch RViz for visualization -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find amr_control)/config/ridgeback_rviz_config.rviz" />
+    <!-- Include the turtlebot3_remote.launch file -->
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/>
 
-   <!-- Run the amcl node for adaptive Monte Carlo localization -->
+    <node name="rviz" pkg="rviz" type="rviz"/>
+
+    <!-- Run the amcl node for adaptive Monte Carlo localization -->
     <node pkg="amcl" type="amcl" name="amcl">
     
         <!-- AMCL parameters for particle filtering and sensor models -->
@@ -50,13 +45,16 @@
         <param name="transform_tolerance"       value="0.5"/>
         <param name="recovery_alpha_slow"       value="0.00"/>
         <param name="recovery_alpha_fast"       value="0.00"/>
-        <param name="initial_pose_x"            value="0.0"/>
+        <param name="initial_pose_x"            value="$(arg init_pose_x)"/>
+        <param name="initial_pose_y"            value="$(arg init_pose_y)"/>
+        <param name="initial_pose_a"            value="$(arg init_pose_yaw)"/>
+        <!-- <param name="initial_pose_x"            value="0.0"/>
         <param name="initial_pose_y"            value="0.0"/>
-        <param name="initial_pose_a"            value="0"/>
+        <param name="initial_pose_a"            value="0"/> -->
         <param name="gui_publish_rate"          value="50.0"/>
 
         <!-- Remap scan topic -->
-        <remap from="scan"                      to="/front/scan"/>
+        <remap from="scan"                      to="/scan"/>
 
         <!-- Laser sensor model parameters -->
         <param name="laser_max_range"           value="3.5"/>
@@ -80,5 +78,7 @@
         <param name="base_frame_id"             value="base_footprint"/>
 
     </node>
+
+    <rosparam file="$(find amr_control)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap"/>
 
 </launch>

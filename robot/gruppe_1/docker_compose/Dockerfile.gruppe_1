@@ -31,8 +31,8 @@ RUN apt-get install -y \
 RUN pip3 install numpy scipy casadi matplotlib pandas
 
 # Display-Umgebung konfigurieren
-RUN echo "export DISPLAY=:0" >> /home/$USERNAME/.bashrc
 RUN echo "source /opt/ros/noetic/setup.bash" >> /home/$USERNAME/.bashrc
+RUN echo "source devel/setup.bash" >> /home/$USERNAME/.bashrc
 
 # Benutzer wechseln
 USER $USERNAME

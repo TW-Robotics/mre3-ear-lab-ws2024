@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<launch>
+  <!-- Launches move_base with the TEB local planner -->
+
+  <!-- Arguments -->
+  <arg name="model" default="burger" doc="Model type [burger, waffle, waffle_pi]" />
+  <arg name="cmd_vel_topic" default="/teleop/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="map_topic" default="/map" />
+
+  <!-- Arguments for initial pose of the robot -->
+  <arg name="init_pose_x" default="0" />
+  <arg name="init_pose_y" default="0" />
+  <arg name="init_pose_yaw" default="0" />
+
+
+  <rosparam file="$(find amr_control)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap"/>
+
+
+    <!-- Run the amcl node for adaptive Monte Carlo localization -->
+    <node pkg="amcl" type="amcl" name="amcl">
+    
+        <!-- AMCL parameters for particle filtering and sensor models -->
+        <param name="min_particles"             value="500"/>
+        <param name="max_particles"             value="1000"/>
+        <param name="kld_err"                   value="0.02"/>
+        <param name="update_min_d"              value="0.20"/>
+        <param name="update_min_a"              value="0.20"/>
+        <param name="resample_interval"         value="1"/>
+        <param name="transform_tolerance"       value="0.5"/>
+        <param name="recovery_alpha_slow"       value="0.00"/>
+        <param name="recovery_alpha_fast"       value="0.00"/>
+        <param name="initial_pose_x"            value="$(arg init_pose_x)"/>
+        <param name="initial_pose_y"            value="$(arg init_pose_y)"/>
+        <param name="initial_pose_a"            value="$(arg init_pose_yaw)"/>
+        <param name="gui_publish_rate"          value="50.0"/>
+
+        <!-- Remap scan topic -->
+        <remap from="scan"                      to="/scan"/>
+
+        <!-- Laser sensor model parameters -->
+        <param name="laser_max_range"           value="3.5"/>
+        <param name="laser_max_beams"           value="180"/>
+        <param name="laser_z_hit"               value="0.5"/>
+        <param name="laser_z_short"             value="0.05"/>
+        <param name="laser_z_max"               value="0.05"/>
+        <param name="laser_z_rand"              value="0.5"/>
+        <param name="laser_sigma_hit"           value="0.2"/>
+        <param name="laser_lambda_short"        value="0.1"/>
+        <param name="laser_likelihood_max_dist" value="2.0"/>
+        <param name="laser_model_type"          value="likelihood_field"/>
+
+        <!-- Odometry model parameters -->
+        <param name="odom_model_type"           value="diff"/>
+        <param name="odom_alpha1"               value="0.1"/>
+        <param name="odom_alpha2"               value="0.1"/>
+        <param name="odom_alpha3"               value="0.1"/>
+        <param name="odom_alpha4"               value="0.1"/>
+        <param name="odom_frame_id"             value="odom"/>
+        <param name="base_frame_id"             value="base_footprint"/>
+        <param name="global_frame_id"           value="map" />
+
+    </node>
+
+  <!-- Launch move_base node -->
+  <node pkg="move_base" type="move_base" name="move_base" output="screen">
+    
+    <!-- Use TEB as the local planner -->
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    
+    <!-- Load common costmap parameters for global and local costmaps -->
+    <rosparam file="$(find amr_control)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find amr_control)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+    
+    <!-- Load local and global costmap-specific parameters -->
+    <rosparam file="$(find amr_control)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find amr_control)/param/global_costmap_params.yaml" command="load" />
+
+    <!-- Load move_base parameters -->
+    <rosparam file="$(find amr_control)/param/move_base_params.yaml" command="load" />
+
+    <!-- Load the TEB planner-specific parameters -->
+    <rosparam file="$(find amr_control)/param/teb_local_planner_params.yaml" command="load"/>
+
+    <!-- Remap topics if necessary -->
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+    <remap from="odom" to="$(arg odom_topic)" />
+    <remap from="map" to="$(arg map_topic)" />
+    <!-- <remap from="scan" to="/fake_scan" /> -->
+    
+  </node>
+</launch>
