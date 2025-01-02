@@ -1,0 +1,10 @@
+<launch>
+  <!-- Launch the first launch file -->
+  <include file="$(find move_odin)/launch/play_rosbag.launch"/>
+
+  <!-- Delay the second launch until the first completes -->
+  <include file="$(find localization)/launch/pcl_to_scan.launch"/>
+
+  <!-- Delay the third launch until the second completes -->
+  <include file="$(find localization)/launch/amcl_localization.launch"/>
+</launch>

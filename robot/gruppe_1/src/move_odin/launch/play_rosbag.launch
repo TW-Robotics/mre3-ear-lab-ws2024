@@ -1,6 +1,6 @@
 <launch>
     <!-- Argument for specifying the bag file -->
-    <arg name="bag_file" default="/app/src/move_odin/bag/2024-03-09-10-11-23.bag" />
+    <arg name="bag_file" default="/app/src/localization/rosbag/rosbag_MRELAB.bag" />
     
     <!-- Argument for specifying the RViz config file -->
     <arg name="rviz_config" default="/app/src/move_odin/config/2024-03-09-10-11-23.rviz" />
