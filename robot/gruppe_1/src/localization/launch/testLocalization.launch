@@ -7,4 +7,8 @@
 
   <!-- Delay the third launch until the second completes -->
   <include file="$(find localization)/launch/amcl_localization.launch"/>
+
+    <!-- Initial pose topic testing -->
+  <node pkg="localization" type="publishInitialPose.py" name="initial_pose_publisher" output="screen"/>
+
 </launch>

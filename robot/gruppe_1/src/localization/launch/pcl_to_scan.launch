@@ -2,8 +2,7 @@
   <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pcl_to_scan">
     <remap from="cloud_in" to="/velodyne_points" />
     <remap from="scan" to="/alexBestScan" />
-    <param name="target_frame" value="base_footprint"/>
-    <!-- <param name="target_frame" value="velodyne" /> -->
+    <param name="target_frame" value="base_link"/>
     <param name="transform_tolerance" value="0.01" />
     <param name="min_height" value="0.1" />
     <param name="max_height" value="1.5" />

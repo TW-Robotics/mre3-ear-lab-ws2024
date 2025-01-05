@@ -1,5 +1,12 @@
 <launch>
 
+  <!-- For rosbag time synchronization -->
+  <param name="use_sim_time" value="true"/>
+
+  <!-- Create static transform from base_link to base_footprint for amcl -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_base_footprint"
+        args="0 0 0 0 0 0 base_link base_footprint 10"/>
+
   <!-- Arguments -->
   <arg name="scan_topic"     default="/alexBestScan"/>
   <arg name="initial_pose_x" default="0.0"/>
@@ -48,7 +55,6 @@
     <remap from="map"                       to="/map"/>
 
     <!-- Remap initial pose to a custom topic -->
-    <remap from="initialpose" to="/KevinsInitialPose"/>
 
   </node>
 </launch>
