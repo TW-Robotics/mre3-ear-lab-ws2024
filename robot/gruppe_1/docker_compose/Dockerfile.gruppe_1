@@ -28,7 +28,7 @@ RUN apt-get install -y \
         gazebo11 ros-noetic-gazebo-ros ros-noetic-gazebo-plugins ros-noetic-gazebo-ros-pkgs
 
 # Python Libraries
-RUN pip3 install numpy scipy casadi matplotlib pandas opencv-python opencv-contrib-python
+RUN pip3 install numpy scipy casadi matplotlib pandas opencv-python opencv-contrib-python rospy
 
 # Display-Umgebung konfigurieren
 RUN echo "source /opt/ros/noetic/setup.bash" >> /home/$USERNAME/.bashrc
