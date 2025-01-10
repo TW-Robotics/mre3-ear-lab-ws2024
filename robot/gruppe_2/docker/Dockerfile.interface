@@ -1,39 +1,45 @@
 FROM ros:noetic-ros-base
 
+# Install required tools and dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     vim \
     htop \
     git \
-    ros-noetic-octomap-server
+    libpcl-dev \
+    ros-noetic-pcl-ros \
+    ros-noetic-rqt-reconfigure
 
 # Create catkin workspace/src folder
 RUN mkdir -p /catkin_ws/src
 
-RUN cd catkin_ws/src &&\
-    /ros_entrypoint.sh git clone https://github.com/UnknownFreeOccupied/ufomap.git &&\
-    /ros_entrypoint.sh git clone https://github.com/jkk-research/pointcloud_to_grid.git &&\
-    /ros_entrypoint.sh git clone https://github.com/LTU-RAI/Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git &&\
-    cd Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map/ \
-    git checkout ros \
-    cd .. &&\
+# Clone necessary repositories
+RUN cd /catkin_ws/src && \
+    /ros_entrypoint.sh git clone https://github.com/jkk-research/pointcloud_to_grid.git && \
+    cd pointcloud_to_grid && \
+    git checkout ros1
+
+# Build the Catkin workspace
+RUN cd /catkin_ws && \
     /ros_entrypoint.sh catkin_make
 
-# Install ros dependencies
-RUN apt-get update && rosdep update && rosdep install --from-paths /catkin_ws/src -i -y --rosdistro noetic
+# Install ROS dependencies, skipping unresolved 'pcl'
+RUN apt-get update && \
+    rosdep update && \
+    rosdep install --from-paths /catkin_ws/src -i -y --rosdistro noetic --skip-keys="pcl"
 
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash
+# Update the ROS entrypoint script to source the local workspace
+RUN sed -i '$ d' /ros_entrypoint.sh && \
+    echo "source /catkin_ws/devel/setup.bash" >> /ros_entrypoint.sh && \
+    echo 'exec "$@"' >> /ros_entrypoint.sh
 
-## Add ros sourcing to entrypoint 
-# Remove last line from entrypoint, add local workspace sourcing and readd last line
-RUN sed -i '$ d' /ros_entrypoint.sh
-RUN echo "source /catkin_ws/devel/setup.bash" >> /ros_entrypoint.sh
-#
-RUN echo 'exec "$@"' >> /ros_entrypoint.sh
-# Add sourcing to bashrc for interactive debugging
-RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-RUN echo "source /catkin_ws/devel/setup.bash" >> ~/.bashrc
+# Add sourcing commands to bashrc for interactive debugging
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
+    echo "source /catkin_ws/devel/setup.bash" >> ~/.bashrc
 
+# Use Bash as the default shell
 SHELL ["/bin/bash", "-c"]
+
+# Set the ROS entrypoint
 ENTRYPOINT ["/ros_entrypoint.sh"]

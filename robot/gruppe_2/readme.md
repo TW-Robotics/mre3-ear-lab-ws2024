@@ -14,7 +14,6 @@
 - Checks client availability [network init verification] --> publish three "ready"-topics, one for each group
 
 ### Interface actions
-##NEW
 - get pointlcloud from drone. One of these topics
     - surface_pointcloud pcl::PointCloud<pcl::PointXYZRGB>
     - tsdf_pointcloud pcl::PointCloud<pcl::PointXYZI>
@@ -23,12 +22,6 @@
 - use pointcloud_to_grid ROS 2 package (https://github.com/jkk-research/pointcloud_to_grid?tab=readme-ov-file#readme)
     to convert to occupency grid
 - publish topic
-##OLD
-- gets Voxel Map from drone
-- gets aruco marker pictures from drone
-- computes Voxel to Occupancy grid Map [respects ground hight]
-- provides map & aruco marker picture to AMCL
-
 
 ## Next Steps
 ### General

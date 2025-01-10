@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  ros-master:
+    image: interface-docker
+    command: roscore
+    networks:
+      - ros-network
+
+  ros-publisher:
+    image: test-pub-docker
+    environment:
+      ROS_MASTER_URI: http://ros-master:11311
+      ROS_HOSTNAME: ros-publisher
+    networks:
+      - ros-network
+
+networks:
+  ros-network:
