@@ -2,26 +2,23 @@
 ## Docker Container Setup
 ### Interface Docker Setup [Dockerfile]
 - install ROS-Noetic
-- install Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map
-    - https://github.com/LTU-RAI/Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git [branch "ros"]
-- install pointcloud to ufomap
-    - https://github.com/UnknownFreeOccupied/ufomap.git
 - install pointcloud to occupancy grid
-    - https://github.com/jkk-research/pointcloud_to_grid.git [branch "ros"]
+    - [https://github.com/jkk-research/pointcloud_to_grid/tree/ros2]
 
 ### Docker Compose
 - Interface starts host roscore
 - Checks client availability [network init verification] --> publish three "ready"-topics, one for each group
 
 ### Interface actions
-- get pointlcloud from drone. One of these topics
-    - surface_pointcloud pcl::PointCloud<pcl::PointXYZRGB>
-    - tsdf_pointcloud pcl::PointCloud<pcl::PointXYZI>
-    -mesh_pointcloud pcl::PointCloud<pcl::PointXYZRGB>
-- convert pcl::PointCloud to sensor_msgs/PointCloud2 with custom node (Shouldnt be to hard say Simon)
-- use pointcloud_to_grid ROS 2 package (https://github.com/jkk-research/pointcloud_to_grid?tab=readme-ov-file#readme)
+- get pointlcloud from drone [https://github.com/VIS4ROB-lab/voxfield/tree/main]
+    - We will use the msg type tsdf_pointcloud pcl::PointCloud<pcl::PointXYZI>
+    - The published msg type (although differently documented) is of type sensor_msgs/PointCloud2 with x,y,z and intensity
+    - Apperently only one slice of the 3d pointcloud is published and the hight is defined in foxfield by the drone people
+    - We need to check if it is really a 2d slice of the pointcloud and that the following converter can handle that
+- use pointcloud_to_grid ROS 2 package [https://github.com/jkk-research/pointcloud_to_grid?tab=readme-ov-file#readme]
     to convert to occupency grid
-- publish topic
+  - this package subscribes to a sensor_msgs/PointCloud2 with x,y,z and intensity
+  - after converting it to a occupency grid the node publishes it
 
 ## Next Steps
 ### General
@@ -35,8 +32,7 @@
  ### Occupancy Grid Map OLD Methode
  - subscribe to topic provided by test_client 
     - get pointcloud
-- copmute pointcloud to ufo map with [https://github.com/UnknownFreeOccupied/ufomap.git]
-- compute ufomap to occupancy grid with [https://github.com/LTU-RAI/Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git]
+- copmute pointcloud to occupancy grid with [https://github.com/jkk-research/pointcloud_to_grid?tab=readme-ov-file#readme]
 
 ## What we dont know
 - making sure cloning the correct branch "ros" Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git for  & pointcloud_to_grid.git
