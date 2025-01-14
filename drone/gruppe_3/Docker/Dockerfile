@@ -30,22 +30,6 @@ RUN mkdir -p ~/catkin_ws/src && \
     cd ~/catkin_ws/src && \
     git clone -b ros1-legacy https://github.com/IntelRealSense/realsense-ros.git
 
-RUN cd ~/ && \
-    git clone --recursive https://github.com/stevenlovegrove/Pangolin.git && \
-    cd ~/Pangolin && \
-    ./scripts/install_prerequisites.sh required && \
-    cmake -B build && \
-    cmake --build build
-
-RUN cd ~/catkin_ws/src && \
-    git clone https://github.com/raulmur/ORB_SLAM2.git ORB_SLAM2
-
-COPY ./files/ORB_SLAM2/CMakeLists.txt ~/catkin_ws/src/ORB_SLAM2/
-
-RUN cd ~/catkin_ws/src/ORB_SLAM2 && \
-    chmod +x build.sh && \
-    ./build.sh
-
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash \
     && cd ~/catkin_ws \
     && catkin_make"
