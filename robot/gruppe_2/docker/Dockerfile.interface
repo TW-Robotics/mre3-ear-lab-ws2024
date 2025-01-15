@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     libpcl-dev \
     ros-noetic-pcl-ros \
+    ros-noetic-rviz \
     ros-noetic-rqt-reconfigure
 
 # Create catkin workspace/src folder
@@ -43,3 +44,6 @@ SHELL ["/bin/bash", "-c"]
 
 # Set the ROS entrypoint
 ENTRYPOINT ["/ros_entrypoint.sh"]
+
+# Keep the container running with a lightweight process
+CMD ["bash"]

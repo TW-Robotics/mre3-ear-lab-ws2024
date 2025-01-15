@@ -1,18 +1,19 @@
-version: '3.8'
+version: "3.9"
+
 services:
-  ros-master:
+  ros-container:
     image: interface-docker
-    command: roscore
-    networks:
-      - ros-network
-
-  ros-publisher:
-    image: test-pub-docker
+    container_name: ros_container
+    network_mode: host  # Allows ROS to use the host network
     environment:
-      ROS_MASTER_URI: http://ros-master:11311
-      ROS_HOSTNAME: ros-publisher
-    networks:
-      - ros-network
+      - DISPLAY=${DISPLAY}  # Pass the host's DISPLAY variable for GUI
+      - QT_X11_NO_MITSHM=1  # Fix shared memory issues for X11
+      - QT_QPA_PLATFORM=xcb  # Ensures Qt applications use X11
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket for GUI applications
+    stdin_open: true  # Keep STDIN open for interaction
+    tty: true         # Allocate a pseudo-TTY for terminal access
+    command: ["/bin/bash"]  # Default command to keep the container running
 
-networks:
-  ros-network:
+    # Automatically removes container after exit, similar to --rm
+    restart: no
