@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="coordination_node" pkg="commander" type="coordination_node.py" output="screen"/>
+
+</launch>
