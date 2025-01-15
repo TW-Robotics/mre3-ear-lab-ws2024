@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="aruco_detect" pkg="aruco_estimation" type="aruco_detect.py" output="screen"/>
+
+</launch>

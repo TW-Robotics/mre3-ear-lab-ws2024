@@ -3,6 +3,7 @@
 import rospy
 import subprocess
 from nav_msgs.msg import OccupancyGrid
+import std_msgs.msg
 
 def is_topic_available(topic_name, msg_type, timeout=1.0):
     """
@@ -54,8 +55,15 @@ def coordination_node():
 
         # Launch ArUco detection launch file if not already launched
         if not aruco_launched:
-            aruco_process = launch_file("aruco_detect", "aruco_detect.launch")
+            aruco_process = launch_file("aruco_estimation", "detect_aruco.launch")
             aruco_launched = True
+
+        # Check if ArUco detection node is running correctly
+        if aruco_launched:
+            if aruco_process.poll() is not None or not is_topic_available('/aruco_detected_markers', std_msgs.msg.String):
+                rospy.logwarn("ArUco detection Node is not running correctly. Relaunching...")
+                aruco_process = launch_file("aruco_estimation", "detect_aruco.launch")
+                aruco_launched = True
 
         # Check for additional topics required for AMCL
         if (not is_topic_available('/init_pose', OccupancyGrid) or
