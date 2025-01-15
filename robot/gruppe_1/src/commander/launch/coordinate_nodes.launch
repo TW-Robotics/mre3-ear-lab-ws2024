@@ -1,5 +1,9 @@
 <launch>
+  <!-- Argument mit Standardwert -->
+  <arg name="local_planner" default="teb"/>
 
-  <node name="coordination_node" pkg="commander" type="coordination_node.py" output="screen"/>
-
+  <!-- Node starten und Argument übergeben -->
+  <node name="coordination_node" pkg="commander" type="coordination_node.py" output="screen">
+    <param name="local_planner" value="$(arg local_planner)"/>
+  </node>
 </launch>

@@ -52,6 +52,6 @@ CATKIN_IGNORE
 
 # No rosbags
 *.bag
-robot/gruppe_1/src/move_odin/bag/*.bag
+robot/gruppe_1/src/rosbags/bag/*.bag
 robot/gruppe_1/src/localization/rosbag/*.bag
 robot/gruppe_1/src/amr_control/data/rosbags/*.bag

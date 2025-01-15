@@ -75,14 +75,14 @@ def coordination_node():
             local_planner = rospy.get_param('~local_planner', 'teb')
 
             if local_planner == 'nmpc':
-                launch_file("local_planner", "nmpc.launch")
+                launch_file("amr_control", "move_base_nMPC.launch")
             elif local_planner == 'teb':
-                launch_file("teb_local_planner", "teb.launch")
+                launch_file("amr_control", "move_base_TEB.launch")
             elif local_planner == 'dwa':
-                launch_file("dwa_local_planner", "dwa.launch")
+                launch_file("amr_control", "move_base_DWA.launch")
             else:
                 rospy.logwarn(f"Unknown local planner '{local_planner}', defaulting to TEB.")
-                launch_file("teb_local_planner", "teb.launch")
+                launch_file("amr_control", "teb.launch")
             
             local_planner_launched = True
 

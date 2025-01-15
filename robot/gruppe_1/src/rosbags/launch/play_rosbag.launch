@@ -1,0 +1,15 @@
+<launch>
+    <!-- Argument for specifying the bag file -->
+    <!-- <arg name="bag_file" default="/app/src/localization/rosbag/rosbag_MRELAB.bag" /> -->
+    <arg name="bag_file" default="/app/src/rosbags/bag/2024-03-09-10-11-23.bag" />
+
+    <!-- Argument for specifying the RViz config file -->
+    <arg name="rviz_config" default="/app/src/rosbags/config/2024-03-09-10-11-23.rviz" />
+
+    <!-- Play the bag file -->
+    <node pkg="rosbag" type="play" name="play_bag" args="$(arg bag_file)" output="screen" />
+
+    <!-- Launch RViz with the specified configuration -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" output="screen" />
+    
+</launch>
