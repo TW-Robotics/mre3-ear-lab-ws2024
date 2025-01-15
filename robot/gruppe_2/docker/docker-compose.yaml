@@ -3,7 +3,7 @@ version: "3.9"
 services:
   ros-container:
     image: interface-docker
-    container_name: ros_container
+    container_name: interface_container
     network_mode: host  # Allows ROS to use the host network
     environment:
       - DISPLAY=${DISPLAY}  # Pass the host's DISPLAY variable for GUI
