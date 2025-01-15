@@ -36,3 +36,8 @@
 
 ## What we dont know
 - making sure cloning the correct branch "ros" Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git for  & pointcloud_to_grid.git
+
+
+## remember
+- DOCKER_BUILDKIT=1 docker build --ssh default --build-arg CACHEBUST=$(date +%s) -f Dockerfile.interface -t interface-docker .
+- roslaunch interface_pkg interface.launch || sleep infinity"

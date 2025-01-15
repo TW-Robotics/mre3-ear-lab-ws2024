@@ -27,6 +27,9 @@ RUN cd /catkin_ws/src && \
     cd pointcloud_to_grid && \
     git checkout ros1
 
+# Add a build argument to invalidate cache
+ARG CACHEBUST=1
+
 # Clone private repository using SSH into catkin_ws/src and checkout 'gruppe_2' branch
 RUN --mount=type=ssh cd /catkin_ws/src && \
     /ros_entrypoint.sh git clone git@github.com:TW-Robotics/mre3-ear-lab-ws2024.git && \

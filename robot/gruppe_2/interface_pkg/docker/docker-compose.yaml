@@ -13,7 +13,8 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket for GUI applications
     stdin_open: true  # Keep STDIN open for interaction
     tty: true         # Allocate a pseudo-TTY for terminal access
-    command: ["/bin/bash"]  # Default command to keep the container running
-
-    # Automatically removes container after exit, similar to --rm
+    command: >
+      bash -c "source /opt/ros/noetic/setup.bash &&
+               source /catkin_ws/devel/setup.bash &&
+               roslaunch interface_pkg interface.launch"
     restart: no
