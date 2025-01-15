@@ -4,6 +4,8 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
+        - /TF1
         - /DepthCloud1/Auto Size1
       Splitter Ratio: 0.5
     Tree Height: 336
@@ -61,7 +63,6 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
-        "": true
         DepthCloud: true
         Grid: true
         Image: true
@@ -72,6 +73,7 @@ Visualization Manager:
         PointCloud2: true
         Pose: true
         PoseArray: true
+        PoseWithCovariance: true
         RobotModel: true
         TF: true
         Value: true
@@ -515,7 +517,7 @@ Visualization Manager:
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 255; 255; 255
     Default Light: true
     Fixed Frame: map
     Frame Rate: 30
@@ -541,7 +543,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.444440841674805
+      Distance: 5.44042444229126
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -549,17 +551,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 44.710662841796875
-        Y: 66.33415985107422
-        Z: 20.348417282104492
+        X: 55.60538101196289
+        Y: 81.36852264404297
+        Z: 2.8389813899993896
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.26479730010032654
       Target Frame: <Fixed Frame>
-      Yaw: 5.496578216552734
+      Yaw: 6.166582107543945
     Saved: ~
 Window Geometry:
   Camera:

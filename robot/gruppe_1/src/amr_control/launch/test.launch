@@ -6,7 +6,7 @@
   <arg name="model" default="burger" doc="Model type [burger, waffle, waffle_pi]" />
   <arg name="cmd_vel_topic" default="/teleop/cmd_vel" />
   <arg name="odom_topic" default="odom" />
-  <arg name="map_topic" default="/map" />
+  <arg name="map_topic" default="map" />
 
   <!-- Arguments for initial pose of the robot -->
   <arg name="init_pose_x" default="0" />
