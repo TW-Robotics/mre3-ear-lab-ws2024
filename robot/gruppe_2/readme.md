@@ -47,3 +47,6 @@
 - publishes ground map here: <param name="mapi_topic_name" value="lidargrid_i"/>
 - publishes hight map here: <param name="maph_topic_name" value="lidargrid_h"/>
 -- adjustable in init to with setting ros param
+
+# toDo
+-- launch pointcloud_to_grid rviz launch in initScript.py

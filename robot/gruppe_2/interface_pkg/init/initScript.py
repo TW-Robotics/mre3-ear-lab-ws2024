@@ -2,35 +2,69 @@
 import rospy
 import rosnode
 import subprocess
-import time
 
-def check_node(node_name):
-    """Check if a specific ROS node is online."""
+def check_nodes(target_nodes):
+    """Check which specified ROS nodes are online."""
     try:
         active_nodes = rosnode.get_node_names()
-        return node_name in active_nodes
+        missing_nodes = [node for node in target_nodes if node not in active_nodes]
+        return missing_nodes
     except Exception as e:
         rospy.logerr(f"Error checking nodes: {e}")
-        return False
+        return target_nodes  # Assume all nodes are missing in case of error
 
 def launch_ptg_node():
-    """Launch the ptg node."""
+    """Launch the ptg node and return the process handle."""
     try:
         rospy.loginfo("Launching ptg node...")
-        subprocess.Popen(["roslaunch", "pointcloud_to_grid", "demo.launch"])
+        process = subprocess.Popen(
+            ["roslaunch", "pointcloud_to_grid", "demo.launch"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return process
     except Exception as e:
         rospy.logerr(f"Failed to launch ptg node: {e}")
+        return None
 
 if __name__ == "__main__":
-    rospy.init_node("network_check_node")
-    target_node = "/test_node"
-    rate = rospy.Rate(1)  # Check every second
+    # Configuration section
+    target_nodes = ["/test_node", "/example_node"]  # List of nodes to monitor
+    check_rate_hz = 1  # Frequency to check node status in Hz
 
-    while not rospy.is_shutdown():
-        if check_node(target_node):
-            rospy.loginfo(f"Node {target_node} is online. Launching ptg...")
-            launch_ptg_node()
-            break  # Exit after launching ptg
-        else:
-            rospy.logwarn(f"Node {target_node} is offline. Retrying...")
-        rate.sleep()
+    # Initialize ROS node
+    rospy.init_node("network_check_node")
+    rate = rospy.Rate(check_rate_hz)
+
+    ptg_process = None  # Will hold the ptg process handle
+    ptg_launched = False  # Track if the ptg node has been launched
+
+    rospy.loginfo(f"Monitoring nodes: {target_nodes}")
+
+    try:
+        while not rospy.is_shutdown():
+            # Check which nodes are missing
+            missing_nodes = check_nodes(target_nodes)
+            if missing_nodes:
+                rospy.logwarn(f"The following nodes are missing: {missing_nodes}")
+            else:
+                rospy.loginfo("All nodes are online.")
+
+                # Launch the ptg node if it hasn't been launched yet
+                if not ptg_launched:
+                    ptg_process = launch_ptg_node()
+                    if ptg_process:
+                        ptg_launched = True
+                        rospy.loginfo("ptg node successfully launched.")
+                    else:
+                        rospy.logerr("Failed to launch ptg node.")
+
+            # Ensure the script keeps running; do not stop the ptg node
+            if ptg_launched and ptg_process and ptg_process.poll() is not None:
+                rospy.logwarn("ptg node process stopped unexpectedly, but will not be restarted as per requirements.")
+
+            rate.sleep()
+
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Shutting down node monitoring.")
+    rospy.spin()

@@ -10,11 +10,4 @@
         <param name="maph_topic_name" value="lidargrid_h" />
         <param name="mapi_topic_name" value="lidargrid_i" />
     </node>
-
-    <!-- Launch the network_check_node -->
-    <node pkg="interface_pkg" type="network_check.py" name="network_check_node" output="screen">
-        <!-- << Optional parameters to pass to the script >> -->
-        <param name="target_nodes" value="/test_node" />
-        <param name="check_rate_hz" value="1" />
-    </node>
 </launch>

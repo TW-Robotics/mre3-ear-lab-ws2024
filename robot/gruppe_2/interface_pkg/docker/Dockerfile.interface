@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     htop \
     git \
     libpcl-dev \
+    #pcl-tools \
     ros-noetic-pcl-ros \
     ros-noetic-rviz \
     ros-noetic-hector-xacro-tools \
