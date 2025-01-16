@@ -9,7 +9,9 @@ from tf.transformations import quaternion_from_euler
 
 
 class ArucoDetectorROS:
-    def __init__(self, marker_length=0.0717):
+    MARKER_SIZE = 0.0717  # in meters
+
+    def __init__(self, marker_length=MARKER_SIZE):
         rospy.loginfo("Initializing ArUco Detector Node")
         self.bridge = CvBridge()
         self.marker_length = marker_length
@@ -27,7 +29,7 @@ class ArucoDetectorROS:
         self.publish_rate = rospy.Duration(1.0)  # 1 second interval
 
         # Publisher for marker pose
-        self.pose_pub = rospy.Publisher("/arucoinitialpose_0", PoseStamped, queue_size=1)
+        self.pose_pub = rospy.Publisher("/initialpose", PoseStamped, queue_size=1)
 
         # Subscribers
         self.image_sub = rospy.Subscriber("/oak/rgb/image_raw", Image, self.image_callback)
