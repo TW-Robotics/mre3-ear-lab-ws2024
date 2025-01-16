@@ -7,6 +7,9 @@
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_base_footprint"
         args="0 0 0 0 0 0 base_link base_footprint 10"/>
 
+  <!-- Start pcl to scan launch -->
+  <include file="$(find localization)/launch/pcl_to_scan.launch"/>
+
   <!-- Arguments -->
   <arg name="scan_topic"     default="/alexBestScan"/>
   <arg name="initial_pose_x" default="0.0"/>
