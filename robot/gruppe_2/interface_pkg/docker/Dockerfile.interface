@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-rviz \
     ros-noetic-hector-xacro-tools \
     ros-noetic-velodyne-description \
-    ros-noetic-rqt-reconfigure
+    ros-noetic-rqt-reconfigure \
+    libgl1-mesa-glx \
+    libglu1-mesa  
 
 # Create catkin workspace/src folder
 RUN mkdir -p /catkin_ws/src

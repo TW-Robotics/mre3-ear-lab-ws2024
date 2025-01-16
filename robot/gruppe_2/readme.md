@@ -43,3 +43,7 @@
 - DOCKER_BUILDKIT=1 docker build --ssh default --build-arg CACHEBUST=$(date +%s) -f Dockerfile.interface -t interface-docker .
 - roslaunch interface_pkg interface.launch || sleep infinity"
 - xhost +local:root
+- subscribe pcl::PointCloud2 here: <param name="cloud_in_topic" value="/left_os1/os1_cloud_node/points"/>
+- publishes ground map here: <param name="mapi_topic_name" value="lidargrid_i"/>
+- publishes hight map here: <param name="maph_topic_name" value="lidargrid_h"/>
+-- adjustable in init to with setting ros param
