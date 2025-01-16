@@ -8,31 +8,29 @@ def check_node(node_name):
     """Check if a specific ROS node is online."""
     try:
         active_nodes = rosnode.get_node_names()
-        if node_name in active_nodes:
-            rospy.loginfo(f"Node {node_name} is online.")
-            return True
-        else:
-            rospy.logwarn(f"Node {node_name} is offline.")
-            return False
+        return node_name in active_nodes
     except Exception as e:
         rospy.logerr(f"Error checking nodes: {e}")
         return False
 
-def launch_pointcloud_to_grid():
-    """Launch the pointcloud_to_grid demo.launch file."""
+def launch_ptg_node():
+    """Launch the ptg node."""
     try:
-        rospy.loginfo("Launching pointcloud_to_grid demo.launch...")
+        rospy.loginfo("Launching ptg node...")
         subprocess.Popen(["roslaunch", "pointcloud_to_grid", "demo.launch"])
     except Exception as e:
-        rospy.logerr(f"Failed to launch demo.launch: {e}")
+        rospy.logerr(f"Failed to launch ptg node: {e}")
 
 if __name__ == "__main__":
-    rospy.init_node("test_node")
-    target_node = "/test_node"  # Name of the node to check
+    rospy.init_node("network_check_node")
+    target_node = "/test_node"
     rate = rospy.Rate(1)  # Check every second
 
     while not rospy.is_shutdown():
         if check_node(target_node):
-            launch_pointcloud_to_grid()
-            break  # Exit the loop after launching the file
+            rospy.loginfo(f"Node {target_node} is online. Launching ptg...")
+            launch_ptg_node()
+            break  # Exit after launching ptg
+        else:
+            rospy.logwarn(f"Node {target_node} is offline. Retrying...")
         rate.sleep()

@@ -42,3 +42,4 @@
 ## remember
 - DOCKER_BUILDKIT=1 docker build --ssh default --build-arg CACHEBUST=$(date +%s) -f Dockerfile.interface -t interface-docker .
 - roslaunch interface_pkg interface.launch || sleep infinity"
+- xhost +local:root

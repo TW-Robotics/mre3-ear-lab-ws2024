@@ -1,7 +1,4 @@
 <launch>
-    <!-- Launch the pointcloud_to_grid demo.launch -->
-    <include file="$(find pointcloud_to_grid)/launch/demo.launch" />
-
     <!-- Run the initScript.py as a ROS node -->
     <node pkg="interface_pkg" type="initScript.py" name="network_check_node" output="screen" />
 </launch>
