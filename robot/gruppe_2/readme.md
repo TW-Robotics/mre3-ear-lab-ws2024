@@ -35,7 +35,8 @@
 - copmute pointcloud to occupancy grid with [https://github.com/jkk-research/pointcloud_to_grid?tab=readme-ov-file#readme]
 
 ## What we dont know
-- making sure cloning the correct branch "ros" Map-Conversion-3D-Voxel-Map-to-2D-Occupancy-Map.git for  & pointcloud_to_grid.git
+- pcl rosdep skip in dockerfile?
+- pcl install at beginning dockerfile
 
 
 ## remember

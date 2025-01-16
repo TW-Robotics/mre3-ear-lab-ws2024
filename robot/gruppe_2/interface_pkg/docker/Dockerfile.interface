@@ -36,7 +36,6 @@ RUN --mount=type=ssh cd /catkin_ws/src && \
     cd mre3-ear-lab-ws2024 && \
     git checkout gruppe_2
 
-
 # Build the Catkin workspace
 RUN cd /catkin_ws && \
     /ros_entrypoint.sh catkin_make

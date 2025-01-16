@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import rospy
 import rosnode
+import subprocess
 import time
 
 def check_node(node_name):
-    """Check if a specific ROS node is running."""
+    """Check if a specific ROS node is online."""
     try:
         active_nodes = rosnode.get_node_names()
         if node_name in active_nodes:
@@ -17,11 +18,21 @@ def check_node(node_name):
         rospy.logerr(f"Error checking nodes: {e}")
         return False
 
+def launch_pointcloud_to_grid():
+    """Launch the pointcloud_to_grid demo.launch file."""
+    try:
+        rospy.loginfo("Launching pointcloud_to_grid demo.launch...")
+        subprocess.Popen(["roslaunch", "pointcloud_to_grid", "demo.launch"])
+    except Exception as e:
+        rospy.logerr(f"Failed to launch demo.launch: {e}")
+
 if __name__ == "__main__":
-    rospy.init_node("network_check_node")
-    target_node = "/test_node"  # Replace with your test container's node name
+    rospy.init_node("test_node")
+    target_node = "/test_node"  # Name of the node to check
     rate = rospy.Rate(1)  # Check every second
 
     while not rospy.is_shutdown():
-        check_node(target_node)
+        if check_node(target_node):
+            launch_pointcloud_to_grid()
+            break  # Exit the loop after launching the file
         rate.sleep()
