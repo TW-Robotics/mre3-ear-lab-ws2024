@@ -135,11 +135,11 @@ class CoordinationNode:
 
     def run(self):
         while not rospy.is_shutdown():
-            # rospy.loginfo("|----------------------------------|")
+            rospy.loginfo("|----------------------------------|")
 
-            # # Check and wait for the map topic
-            # if not self.check_map_topic():
-            #     continue
+            # Check and wait for the map topic
+            if not self.check_map_topic():
+                continue
 
             # # Check and wait for the drone image topic
             # if not self.is_topic_available('/drone_image', OccupancyGrid):
@@ -147,11 +147,11 @@ class CoordinationNode:
             #     self.rate.sleep()
             #     # continue
 
-            # # Check and launch ArUco detection
+            # Check and launch ArUco detection
             # self.check_and_launch_aruco()
 
-            # For testing purposes, publish an initial pose. Delete in real deployment.
-            self.run_node("localization", "publishInitialPose.py")
+            # # For testing purposes, publish an initial pose. Delete in real deployment.
+            # self.run_node("localization", "publishInitialPose.py")
 
             # Check and launch AMCL
             if not self.check_and_launch_amcl():

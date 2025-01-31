@@ -8,7 +8,8 @@ services:
       dockerfile: Dockerfile.gruppe_1
     network_mode: host  # Host-Netzwerk für ROS-Kommunikation
     privileged: true
-    command: roscore
+    # command: roslaunch /app/src/commander/launch/coordinate_nodes.launch --wait
+    # command: roscore
     environment:
       - DISPLAY=${DISPLAY}      # X11-Display
       - QT_X11_NO_MITSHM=1       # Für Qt-basierte Anwendungen

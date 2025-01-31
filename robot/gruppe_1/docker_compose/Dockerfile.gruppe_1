@@ -1,6 +1,8 @@
 # Basis-Image mit vollständiger ROS Noetic Desktop-Umgebung für Visualisierung
 FROM osrf/ros:noetic-desktop-full
-
+# Set Ros Master & IP
+ENV ROS_MASTER_URI=http://10.0.0.100:11311
+ENV ROS_HOSTNAME=10.0.0.108
 # Benutzererstellung
 ARG USERNAME=rosuser
 ARG USER_UID=1000
@@ -11,7 +13,6 @@ RUN apt-get update && apt-get install -y sudo git python3-pip x11-xserver-utils 
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
-
 # ROS-Pakete installieren
 RUN apt-get install -y \
         ros-noetic-move-base \
@@ -25,17 +26,21 @@ RUN apt-get install -y \
         ros-noetic-rviz \
         ros-noetic-amcl \
         ros-noetic-xacro \
-        gazebo11 ros-noetic-gazebo-ros ros-noetic-gazebo-plugins ros-noetic-gazebo-ros-pkgs
+        gazebo11 \
+        ros-noetic-gazebo-ros \
+        ros-noetic-gazebo-plugins \
+        ros-noetic-gazebo-ros-pkgs
 
 # Python Libraries
-RUN pip3 install numpy scipy casadi matplotlib pandas opencv-python opencv-contrib-python rospy
+# RUN pip3 install numpy scipy casadi matplotlib pandas opencv-python opencv-contrib-python rospy
+RUN python3 -m pip install numpy scipy casadi matplotlib pandas opencv-python opencv-contrib-python
 
 # Display-Umgebung konfigurieren
 RUN echo "source /opt/ros/noetic/setup.bash" >> /home/$USERNAME/.bashrc
 RUN echo "source devel/setup.bash" >> /home/$USERNAME/.bashrc
-
 # Benutzer wechseln
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
 CMD ["bash"]
+
